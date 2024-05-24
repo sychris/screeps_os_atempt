@@ -9,12 +9,23 @@ function spawner() {
   let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
   console.log('Harvesters: ' + harvesters.length);
   
+  let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
+  console.log('upgraders: ' + harvesters.length);
+  
   if (harvesters.length < 2) {
     let newName = 'Harvester' + Game.time;
     console.log('Spawning new harvester: ' + newName);
     Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName,
       {memory: {role: 'harvester'}});
   }
+  
+  if (upgraders.length < 2) {
+    let newName = 'upgrader' + Game.time;
+    console.log('Spawning new upgrader: ' + newName);
+    Game.spawns['Spawn1'].spawnCreep([WORK, CARRY, MOVE], newName,
+      {memory: {role: 'upgrader'}});
+  }
+  
   
   if (Game.spawns['Spawn1'].spawning) {
     let spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
@@ -31,7 +42,7 @@ function spawner() {
       harvester(creep);
     }
     if (creep.memory.role === 'upgrader') {
-      harvester(creep);
+      upgrader(creep);
     }
   }
 }
@@ -64,6 +75,28 @@ function harvester(creep) {
           creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
         }
       }
+    }
+  }
+}
+
+function upgrader(creep) {
+  if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] === 0) {
+    creep.memory.upgrading = false;
+    creep.say('🔄 harvest');
+  }
+  if (!creep.memory.upgrading && creep.store.getFreeCapacity() === 0) {
+    creep.memory.upgrading = true;
+    creep.say('⚡ upgrade');
+  }
+  
+  if (creep.memory.upgrading) {
+    if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+    }
+  } else {
+    let sources = creep.room.find(FIND_SOURCES);
+    if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
     }
   }
 }
