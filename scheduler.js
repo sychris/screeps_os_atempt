@@ -23,7 +23,7 @@ class scheduler {
   }
 }
 
-function create_process(p_name, args) {
+function create_process(p_name, args, priority = 500) {
   let p = {}
   p.name = p_name
   p.args = args

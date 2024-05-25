@@ -1,6 +1,7 @@
 const scheduler = require("./scheduler");
 const file_system = require("./file_system");
 
+
 class kernel {
   constructor() {
     this.sched = new scheduler()
@@ -29,6 +30,10 @@ class kernel {
   
   }
   
+  uuid() {
+    Memory.kernel.UUID = Memory.kernel.UUID + 1
+    return "UU" + Memory.kernel.UUID
+  }
   verify_sliver() {
     if (this.valid_tick !== Game.time - 1) {
       this.valid_tick = Game.time

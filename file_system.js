@@ -18,6 +18,8 @@ class file_system {
   rebuild_memory() {
     Memory.fs = {}
     Memory.fs.Perm = {}
+    Memory.kernel = {}
+    Memory.kernel.UUID = 0
     
     console.log("memory rebuilt =) have a nice day!");
   }
