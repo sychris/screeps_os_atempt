@@ -9,18 +9,23 @@ class kernel {
   }
   
   run() {
-    let list_to_run = this.sched.run()
-    for (let p in list_to_run) {
-      this.exe(list_to_run[p])
-    }
+    this.init_tick()
+    this.tick()
+    this.post_tick()
   }
   
   init_tick() {
     return
   }
   
+  tick() {
+    let list_to_run = this.sched.run()
+    for (let p in list_to_run) {
+      this.exe(list_to_run[p])
+    }
+  }
   post_tick() {
-    this.fs.write_out_P_mem()
+  
   }
   
   test() {

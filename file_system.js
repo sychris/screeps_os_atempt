@@ -2,17 +2,17 @@ let p_room = require("p_room")
 
 class file_system {
   constructor() {
-    this.v = {}
-    this.P = Memory.fs
+    //this is volitile and can become stale
+    this.V = {}
+    this.V_is_stale = false
+    this.P = Memory.fs.Perm
+
     if (Memory.fs === undefined) {
       console.log("WARNING!!!  perminate memory corrupt! if this is expected please run command 'global.k.fs.rebuild_memory'")
     }
   }
   
-  write_out_P_mem() {
-    Memory.fs.Perm = this.P
-  }
-  
+  //user command rebuilds the memory but dont use it if unneeded as it will destroy all permanent memory
   rebuild_memory() {
     Memory.fs = {}
     Memory.fs.Perm = {}
@@ -20,18 +20,6 @@ class file_system {
     console.log("memory rebuilt =) have a nice day!")
   }
   
-  link_programs() {
-  
-  }
-  
-  // file system for various memory types
-  parmanent() {
-    return
-  }
-  
-  volitile() {
-  
-  }
   
 }
 
