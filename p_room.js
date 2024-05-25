@@ -10,7 +10,5 @@ p_room = function (room) {
       console.log("room controller in: " + Game.rooms[room].name + " not owned by me")
     }
   }
-//do room stuff
-  return
 }
 module.exports = p_room

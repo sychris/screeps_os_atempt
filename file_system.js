@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 global.p_room = require("p_room")
 
 class file_system {
@@ -5,7 +7,8 @@ class file_system {
     //this is volatile and can become stale
     this.V = {}
     this.P = Memory.fs.Perm
-
+    
+    // noinspection PointlessBooleanExpressionJS
     if (Memory.fs === undefined) {
       console.log("WARNING!!!  permanent memory corrupt! if this is expected please run command 'global.k.fs.rebuild_memory'")
     }
