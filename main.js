@@ -13,8 +13,6 @@ module.exports.loop = function () {
     global.k.verify_sliver()
   }
   global.k.run()
-  console.log(JSON.stringify(Game.rooms))
-  
 }
 
 class kernel {
@@ -25,13 +23,14 @@ class kernel {
   
   run() {
     let list_to_run = this.sched.run()
-    console.log("asdf")
-    for(let p in list_to_run){
-      console.log("running: " + list_to_run[p].name + " with: " +list_to_run[p].args)
+    for (let p in list_to_run) {
       this.exe(list_to_run[p])
     }
   }
   
+  test() {
+    console.log("test fired")
+  }
   verify_sliver() {
     if (this.valid_tick != Game.time - 1) {
       this.valid_tick = Game.time
@@ -44,14 +43,13 @@ class kernel {
   }
   
   exe(process) {
-    console.log(typeof global[process.name])
-    console.log("executing: " + process.name)
+    
     if (process.name in global && typeof global[process.name] === "function") {
       
       global[process.name](process.args);
-    }else{
-      console.log("attempted to call a bad program: " +process.name + "with: " + process.args)
-      global[process.name]()
+    } else {
+      console.log("attempted to call a bad program: " + process.name + "with: " + process.args)
+      
     }
   }
 }
@@ -65,16 +63,14 @@ class scheduler {
     this.availible_programs = [
       "p_room",
     ]
-    for(let p in this.availible_programs){
+    for (let p in this.availible_programs) {
       //this.check_process_in_global(p)
     }
-    
   }
   
   run() {
     let list = []
     list = list.concat(this.room_scheduler())
-    console.log(JSON.stringify(list))
     return list
   }
   
@@ -82,9 +78,7 @@ class scheduler {
     let room_processes = []
     for (let r in Game.rooms) {
       room_processes.push(create_process("p_room", Game.rooms[r].name))
-      console.log("found room: " + Game.rooms[r].name)
     }
-    console.log(JSON.stringify(room_processes))
     return room_processes
   }
 }
@@ -100,8 +94,6 @@ class processes_manager {
   constructor() {
     this.p_room = p_room()
   }
-  
-  
 }
 
 function fs() {
@@ -111,11 +103,13 @@ function fs() {
 
 global.p_room = function (room) {
   console.log("running p_room with id: " + room)
-  if (room.controller !== undefined) {
-    if (room.controller.owner.my === true) {
-      console.log("room controller in: " + room.name + " owned by me")
+  console.log(Game.rooms[room].controller)
+  console.log(JSON.stringify(Game.rooms[room]))
+  if (Game.rooms[room].controller !== undefined) {
+    if (Game.rooms[room].controller.my === true) {
+      console.log("room controller in: " + Game.rooms[room].name + " owned by me")
     } else {
-      console.log("room controller in: " + room.name + " not owned by me")
+      console.log("room controller in: " + Game.rooms[room].name + " not owned by me")
     }
   }
 //do room stuff
