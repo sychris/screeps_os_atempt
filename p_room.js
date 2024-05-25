@@ -1,4 +1,4 @@
-global.p_room = function (room) {
+p_room = function (room) {
   console.log("running p_room with id: " + room)
   console.log(Game.rooms[room].controller)
   

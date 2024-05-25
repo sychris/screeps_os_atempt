@@ -36,7 +36,7 @@ class kernel {
     if (this.valid_tick !== Game.time - 1) {
       this.valid_tick = Game.time
       console.log("out of date kernel flushing volatile fs files")
-      //todo flush volatile fs files
+      this.fs.V_is_stale()
     } else {
       console.log("kernel is running and up to date, current tick time is: " + Game.time)
       this.valid_tick = Game.time

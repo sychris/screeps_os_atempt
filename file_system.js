@@ -1,14 +1,13 @@
-let p_room = require("p_room")
+global.p_room = require("p_room")
 
 class file_system {
   constructor() {
-    //this is volitile and can become stale
+    //this is volatile and can become stale
     this.V = {}
-    this.V_is_stale = false
     this.P = Memory.fs.Perm
 
     if (Memory.fs === undefined) {
-      console.log("WARNING!!!  perminate memory corrupt! if this is expected please run command 'global.k.fs.rebuild_memory'")
+      console.log("WARNING!!!  permanent memory corrupt! if this is expected please run command 'global.k.fs.rebuild_memory'")
     }
   }
   
@@ -18,6 +17,11 @@ class file_system {
     Memory.fs.Perm = {}
     
     console.log("memory rebuilt =) have a nice day!")
+  }
+  
+  V_is_stale() {
+    this.V = {}
+    
   }
   
   
