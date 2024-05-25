@@ -14,33 +14,13 @@ module.exports.loop = function () {
     global.k.verify_sliver()
   }
   global.k.run()
-  console.log("P")
-  let test = {}
-  global.k.fs.P.test = "test"
-  console.log(JSON.stringify(global.k.fs.P))
-  global.k.fs.P.asdf = "asdf"
-  console.log(JSON.stringify(global.k.fs.P))
-  global.k.fs.P.asdf = "jkl"
-  console.log(JSON.stringify(global.k.fs.P))
-  delete global.k.fs.P.asdf
-  console.log(JSON.stringify(global.k.fs.P))
-  
-  console.log("V")
-  global.k.fs.V.test = "test"
-  console.log(JSON.stringify(global.k.fs.V))
-  global.k.fs.V.asdf = "asdf"
-  console.log(JSON.stringify(global.k.fs.V))
-  global.k.fs.V.asdf = "jkl"
-  console.log(JSON.stringify(global.k.fs.V))
-  delete global.k.fs.V.asdf
-  console.log(JSON.stringify(global.k.fs.V))
   
   
 }
 
 
 function thread() {
-  return
+
 }
 
 

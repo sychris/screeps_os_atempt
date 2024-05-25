@@ -15,7 +15,7 @@ class kernel {
   }
   
   init_tick() {
-    return
+  
   }
   
   tick() {
@@ -24,12 +24,9 @@ class kernel {
       this.exe(list_to_run[p])
     }
   }
+  
   post_tick() {
   
-  }
-  
-  test() {
-    console.log("test fired")
   }
   
   verify_sliver() {
@@ -49,7 +46,7 @@ class kernel {
       try {
         global[process.name](process.args);
       } catch (e) {
-        //todo this might wana bee in a database dump or otherwise processed
+        //todo this might want to be in a database dump or otherwise processed
         console.log(e.stack)
       }
     } else {

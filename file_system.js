@@ -11,12 +11,12 @@ class file_system {
     }
   }
   
-  //user command rebuilds the memory but dont use it if unneeded as it will destroy all permanent memory
+  //user command rebuilds the memory but don't use it if unneeded as it will destroy all permanent memory
   rebuild_memory() {
     Memory.fs = {}
     Memory.fs.Perm = {}
     
-    console.log("memory rebuilt =) have a nice day!")
+    console.log("memory rebuilt =) have a nice day!");
   }
   
   V_is_stale() {

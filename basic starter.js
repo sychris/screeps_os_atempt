@@ -71,7 +71,7 @@ function harvester(creep) {
         if (creep.transfer(targets[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
         }
-        //move them close to Spawn if theres not target to fill so  they dont camp the resource node
+        //move them close to Spawn if there's not a target to fill, so  they don't camp the resource node
       }else{
         let targets = creep.room.find(FIND_STRUCTURES, {
           filter: (structure) => {
