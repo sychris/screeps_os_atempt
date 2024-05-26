@@ -33,7 +33,7 @@ class scheduler {
   sort_requests() {
     this.requested_threads.sort(((a, b) => a.priority - b.priority))
     for (let i = 0; i <= this.requested_threads.length; i++) {
-      if (this.requested_threads[i] == undefined || this.requested_threads[i] === null) {
+      if (this.requested_threads[i] === undefined || this.requested_threads[i] === null) {
         this.requested_threads.splice(i, 1)
       }
     }
@@ -48,7 +48,7 @@ class scheduler {
   
   up_all_thread_priority(count = 1) {
     for (let t in this.requested_threads) {
-      this.requested_threads[t].priority = this.requested_threads[t].priority + 1
+      this.requested_threads[t].priority = this.requested_threads[t].priority + count
     }
   }
 }
