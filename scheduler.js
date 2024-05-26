@@ -4,6 +4,7 @@ class scheduler {
   }
   
   run() {
+    this.up_all_thread_priority()
     this.room_scheduler()
     
   }
@@ -35,6 +36,19 @@ class scheduler {
       if (this.requested_threads[i] == undefined || this.requested_threads[i] === null) {
         this.requested_threads.splice(i, 1)
       }
+    }
+  }
+  
+  out_thread_requests() {
+    console.log("threads currently requested")
+    for (let t in this.requested_threads) {
+      console.log(JSON.stringify(this.requested_threads[t]))
+    }
+  }
+  
+  up_all_thread_priority(count = 1) {
+    for (let t in this.requested_threads) {
+      this.requested_threads[t].priority = this.requested_threads[t].priority + 1
     }
   }
 }
