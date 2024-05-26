@@ -1,6 +1,7 @@
 class scheduler {
   constructor() {
     this.requested_threads = []
+    this.finished_threads = []
   }
   
   run() {
@@ -11,26 +12,26 @@ class scheduler {
   
   room_scheduler() {
     for (let r in Game.rooms) {
-      this.request_thread(this.create_process("-1", "p_room", Game.rooms[r].name))
+      this.request_thread(this.create_thread("-1", "p_room", Game.rooms[r].name))
     }
   }
   
-  create_process(parent, processes_name, args, priority = 500) {
-    let p = {}
-    p.parent = parent
-    p.uuid = global.k.uuid()
-    p.name = processes_name
-    p.args = args
-    p.priority = priority
-    return p
+  create_thread(parent, processes_name, args, priority = 500) {
+    let thread = {}
+    thread.parent = parent
+    thread.uuid = global.k.uuid()
+    thread.name = processes_name
+    thread.args = args
+    thread.priority = priority
+    return thread
   }
   
   request_thread(process) {
     this.requested_threads.push(process)
-    this.sort_requests()
+    this.sort_thread_que()
   }
   
-  sort_requests() {
+  sort_thread_que() {
     this.requested_threads.sort(((a, b) => a.priority - b.priority))
     for (let i = 0; i <= this.requested_threads.length; i++) {
       if (this.requested_threads[i] === undefined || this.requested_threads[i] === null) {

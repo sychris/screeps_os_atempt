@@ -45,17 +45,17 @@ class kernel {
     }
   }
   
-  exe(process) {
+  exe(thread) {
     
-    if (process.name in global && typeof global[process.name] === "function") {
+    if (thread.name in global && typeof global[thread.name] === "function") {
       try {
-        global[process.name](process.args);
+        global[thread.name](thread, thread.args);
       } catch (e) {
         //todo this might want to be in a database dump or otherwise processed
         console.log(e.stack)
       }
     } else {
-      console.log("attempted to call a bad program: " + process.name + "with: " + process.args)
+      console.log("attempted to call a bad program: " + thread.name + "with: " + thread.args)
       
     }
   }
