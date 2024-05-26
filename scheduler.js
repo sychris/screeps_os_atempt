@@ -1,33 +1,43 @@
 class scheduler {
   constructor() {
-    this.availible_programs = [
-      "p_room",
-    ]
-    for (let p in this.availible_programs) {
-      //this.check_process_in_global(p)
-    }
+    this.requested_threads = []
   }
   
   run() {
-    let list = []
-    list = list.concat(this.room_scheduler())
-    return list
+    this.room_scheduler()
+    
   }
   
   room_scheduler() {
-    let room_processes = []
     for (let r in Game.rooms) {
-      room_processes.push(create_process("p_room", Game.rooms[r].name))
+      this.request_thread(this.create_process("-1", "p_room", Game.rooms[r].name))
     }
-    return room_processes
+  }
+  
+  create_process(parent, processes_name, args, priority = 500) {
+    let p = {}
+    p.parent = parent
+    p.uuid = global.k.uuid()
+    p.name = processes_name
+    p.args = args
+    p.priority = priority
+    return p
+  }
+  
+  request_thread(process) {
+    this.requested_threads.push(process)
+    this.sort_requests()
+  }
+  
+  sort_requests() {
+    this.requested_threads.sort(((a, b) => a.priority - b.priority))
+    for (let i = 0; i <= this.requested_threads.length; i++) {
+      if (this.requested_threads[i] == undefined || this.requested_threads[i] === null) {
+        this.requested_threads.splice(i, 1)
+      }
+    }
   }
 }
 
-function create_process(p_name, args, priority = 500) {
-  let p = {}
-  p.name = p_name
-  p.args = args
-  return p
-}
 
 module.exports = scheduler

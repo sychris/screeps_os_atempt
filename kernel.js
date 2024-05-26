@@ -20,9 +20,9 @@ class kernel {
   }
   
   tick() {
-    let list_to_run = this.sched.run()
-    for (let p in list_to_run) {
-      this.exe(list_to_run[p])
+    this.sched.run()
+    while (this.sched.requested_threads.length > 0) {
+      this.exe(this.sched.requested_threads.pop())
     }
   }
   
