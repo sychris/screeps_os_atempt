@@ -1,6 +1,9 @@
 // noinspection JSUnusedGlobalSymbols
 
-global.p_room = require("p_room")
+p_room = require("p_room")
+global.programs = {
+  p_room,
+}
 
 class file_system {
   constructor() {

@@ -46,17 +46,13 @@ class kernel {
   }
   
   exe(thread) {
-    
-    if (thread.name in global && typeof global[thread.name] === "function") {
-      try {
-        global[thread.name](thread, thread.args);
-      } catch (e) {
-        //todo this might want to be in a database dump or otherwise processed
-        console.log(e.stack)
-      }
-    } else {
-      console.log("attempted to call a bad program: " + thread.name + "with: " + thread.args)
-      
+    //todo the global[thread.name] needs to be set to the uuid and garbage collected at end of tick
+    try {
+      global[thread.name] = new global.programs[thread.name](thread, thread.args);
+      global[thread.name].run()
+    } catch (e) {
+      //todo this might want to be in a database dump or otherwise processed
+      console.log(e.stack)
     }
   }
 }
