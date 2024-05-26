@@ -1,6 +1,8 @@
-class p_room {
+program = require("program")
+
+class p_room extends program {
   constructor(thread, room) {
-    this.thread = thread
+    super(thread)
     this.room = room
     this.resources = {}
   }
