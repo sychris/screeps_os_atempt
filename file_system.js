@@ -24,6 +24,7 @@ class file_system {
     Memory.kernel = {}
     Memory.kernel.UUID = 0
     
+    
     console.log("memory rebuilt =) have a nice day!");
   }
   

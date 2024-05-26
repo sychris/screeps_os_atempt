@@ -22,12 +22,30 @@ class kernel {
   tick() {
     this.sched.run()
     while (this.sched.requested_threads.length > 0) {
-      this.exe(this.sched.requested_threads.pop())
+      let current_thread = this.sched.requested_threads.pop()
+      this.exe(current_thread)
+      this.sched.finished_threads.push(current_thread)
     }
   }
   
+  garbage_collect_old_threads() {
+    let count = 0
+    let time = Game.cpu.getUsed()
+    console.log("collecting garbage")
+    console.log(Object.keys(global.threads).length)
+    while (this.sched.finished_threads.length > 0) {
+      count += 1
+      let current_thread = this.sched.finished_threads.pop()
+      console.log("attempting garbage collection on: " + current_thread.uuid)
+      delete global.threads[current_thread.uuid]
+      
+    }
+    console.log("outstanding threads: " + Object.keys(global.threads).length)
+    console.log(JSON.stringify(global.threads))
+    console.log(count + " threads cleaned in " + Game.cpu.getUsed() - time + " cpu")
+  }
   post_tick() {
-  
+    this.garbage_collect_old_threads()
   }
   
   uuid() {
@@ -46,10 +64,13 @@ class kernel {
   }
   
   exe(thread) {
+    if (global.threads === undefined) {
+      global.threads = {}
+    }
     //todo the global[thread.name] needs to be set to the uuid and garbage collected at end of tick
     try {
-      global[thread.name] = new global.programs[thread.name](thread, thread.args);
-      global[thread.name].run()
+      global.threads[thread.uuid] = new global.programs[thread.name](thread, thread.args);
+      global.threads[thread.uuid].run()
     } catch (e) {
       //todo this might want to be in a database dump or otherwise processed
       console.log(e.stack)
