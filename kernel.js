@@ -21,6 +21,7 @@ class kernel {
   
   tick() {
     this.sched.run()
+    //todo add a check here to see what used cpu is at and shelf remaining threads to mem at a certain usage
     while (this.sched.requested_threads.length > 0) {
       let current_thread = this.sched.requested_threads.pop()
       this.exe(current_thread)
