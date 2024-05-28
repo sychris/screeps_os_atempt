@@ -1,5 +1,9 @@
-program = require("program")
+let program = require("program")
 creep_builder = require("creep_builder")
+
+
+//not going to comment this file its bad like real bad but its also the only to and from inter thread comms so good luck
+
 
 class p_room extends program {
   constructor(thread, room) {
@@ -9,20 +13,12 @@ class p_room extends program {
     this.resources.sources = {}
     this.structures = {}
     this.structures.spawns = {}
-    this.spawn_pos = {
-      "x": undefined,
-      "y": undefined
-    }
     this.requested_creeps = []
     this.creeps = []
     
     this.my = null
     
     
-  }
-  
-  init() {
-  
   }
   
   /**
@@ -131,8 +127,8 @@ class p_room extends program {
   
   }
   
-  request_creep(receving_uuid, creep_type) {
-    console.log("creep request from: " + receving_uuid + " receved of type: " + creep_type)
+  request_creep(receiving_uuid, creep_type) {
+    console.log("creep request from: " + receiving_uuid + " received of type: " + creep_type)
     let creep = k.creep_build.request_creeps(this.room, "miner")
     this.requested_creeps.push(creep)
     console.log(JSON.stringify(this.requested_creeps))
@@ -145,7 +141,7 @@ class p_room extends program {
     for (let c in Game.creeps) {
       for (let r in this.requested_creeps) {
         //if(Game.creeps[c].name === this.requested_creeps[r].name){
-        //look up splice array logic again think i used it in the sched sort...
+        //look up splice array logic again think I used it in the sched sort...
         //  console.log("found creep that spawned")
         //}
       }

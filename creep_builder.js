@@ -3,6 +3,7 @@
 
 class creep_builder {
   constructor() {
+    //usless poop but dont feel like fixing
     this.role = {}
     this.role.prefix_dilimeter = "_"
     
@@ -43,9 +44,9 @@ class creep_builder {
       if (energy_available < 300) console.log("ERROR: less than 300 energy capacity available in creep_builder")
       if (energy_available = 300) creep_data.parts = [MOVE, WORK, CARRY]
       if (energy_available > 300) creep_data.parts = [MOVE, WORK, WORK, CARRY]
-      //making this on energy cap availible should be more robust
+      //making this on energy cap available should be more robust
       //switch (Game.rooms[room].controller.level){
-      //  case < 300:
+      //  case 0:
       //    console.log("bad request of lvl 0 controller level")
       //    break
       //  case 1:

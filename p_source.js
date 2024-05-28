@@ -8,23 +8,23 @@ class p_source extends program {
     this.source = source
   }
   
+  //overrides program effectively a constructor but not /shrug
   start() {
     console.log("ticking source start")
     if (this.assigned_creep === undefined) {
       this.assigned_creep = global.threads[this.thread.parent].request_creep(this.thread.uuid, "miner")
     }
-    this.status = "pause"
+    this.status = "paused"
     //check if there is a creep for assignment
     //
   }
   
+  //should run every tick
   resume() {
     console.log("p_source")
-    console.log(Game.creeps[this.assigned_creep.name] !== undefined)
-    console.log(Game.creeps[this.assigned_creep.name].pos.x !== this.source.miner_pos.x)
-    console.log(Game.creeps[this.assigned_creep.name].pos.x !== this.source.miner_pos.x)
+
     console.log("p_source")
-    if (Game.creeps[this.assigned_creep.name] !== undefined) {
+    if (Game.creeps[this.assigned_creep.name] !== undefined && Game.creeps[this.assigned_creep.name].pos !== undefined) {
       
       if (Game.creeps[this.assigned_creep.name].pos.x !== this.source.miner_pos.x ||
         Game.creeps[this.assigned_creep.name].pos.y !== this.source.miner_pos.y) {

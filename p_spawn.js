@@ -15,6 +15,7 @@ class spawn extends program {
     this.status = "paused"
   }
   
+  //will only spawn once ^^ make it count lol jk easy to extend but worked for testing :P
   resume() {
   
   }
