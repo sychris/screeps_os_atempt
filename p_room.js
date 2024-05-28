@@ -13,39 +13,11 @@ class p_room extends program {
     
     this.my = null
     
-    this.init()
+    
   }
   
   init() {
-    if (Game.rooms[this.room].controller !== undefined) {
-      if (Game.rooms[this.room].controller.my === true) {
-        this.my = true
-      } else {
-        this.my = false
-      }
-    }
-    let sources = Game.rooms[this.room].find(FIND_SOURCES)
-    if (sources.length > 0) {
-      let ids = []
-      for (let s in sources) {
-        this.resources.sources[sources[s].id] = {}
-        this.resources.sources[sources[s].id].pos = sources[s].pos
-        this.resources.sources[sources[s].id].miner_pos = {"x": 0, "y": 0}
-        
-        let passable = this.look_for_passable_around_point(sources[s].pos.x, sources[s].pos.y)
-        if (passable.plains.length > 0) {
-          this.resources.sources[sources[s].id].miner_pos =
-            {"x": passable.plains[0][0], "y": passable.plains[0][1]}
-        } else {
-          if (passable.swamp > 0) {
-            this.resources.sources[sources[s].id].miner_pos =
-              {"x": passable.swamp[0][0], "y": passable.swamp[0][1]}
-          } else console.log("ERROR in: " + this.room + "found source that is not accessible!")
-        }
-        
-      }
-      console.log(JSON.stringify(this.resources.sources))
-    }
+  
   }
   
   /**
@@ -77,39 +49,78 @@ class p_room extends program {
   }
   
   
-  run() {
+  start() {
     console.log("thread was started with: " + JSON.stringify(this.thread))
-    console.log("running p_room with room name: " + this.room)
-    console.log(Game.rooms[this.room].controller)
-    console.log(JSON.stringify(this.resources.sources))
-    console.log(JSON.stringify(this.spawn_pos))
-    
-    if (this.my) {
-      console.log("room controller in: " + Game.rooms[this.room].name + " owned by me")
-      let structs = Game.rooms[this.room].find(FIND_MY_STRUCTURES)
-      
-      for (let s in structs) {
-        if (structs[s].structureType === "spawn") {
-          this.spawn_pos.x = structs[s].pos.x
-          this.spawn_pos.y = structs[s].pos.y
-          console.log("fount spawn!")
+    if (Game.rooms[this.room].controller !== undefined) {
+      if (Game.rooms[this.room].controller.my === true) {
+        this.my = true
+      } else {
+        this.my = false
+      }
+    }
+    let sources = Game.rooms[this.room].find(FIND_SOURCES)
+    if (sources.length > 0) {
+      for (let s in sources) {
+        this.resources.sources[sources[s].id] = {}
+        this.resources.sources[sources[s].id].pos = sources[s].pos
+        this.resources.sources[sources[s].id].miner_pos = {"x": 0, "y": 0}
+        
+        let passable = this.look_for_passable_around_point(sources[s].pos.x, sources[s].pos.y)
+        if (passable.plains.length > 0) {
+          this.resources.sources[sources[s].id].miner_pos =
+            {"x": passable.plains[0][0], "y": passable.plains[0][1]}
+        } else {
+          if (passable.swamp > 0) {
+            this.resources.sources[sources[s].id].miner_pos =
+              {"x": passable.swamp[0][0], "y": passable.swamp[0][1]}
+          } else console.log("ERROR in: " + this.room + "found source that is not accessible!")
         }
-        console.log(structs[s])
         
       }
-      console.log(JSON.stringify(structs))
-      
-      
-    } else {
-      console.log("room in: " + Game.rooms[this.room] + " is not owned by me :(")
+      console.log(JSON.stringify(this.resources.sources))
     }
+    
+    
+    if (this.my) this.my_controlled_room()
+    if (!this.my) this.not_my_controlled_room()
+    
+    console.log("status: " + this.status)
+    this.status = "paused"
+  }
+  
+  resume() {
+    console.log("resuming p_room with room name: " + this.room)
+  }
+  
+  my_controlled_room() {
+    console.log("room controller in: " + Game.rooms[this.room].name + " owned by me")
+    let structs = Game.rooms[this.room].find(FIND_MY_STRUCTURES)
+    let construction_sites = Game.rooms[this.room].find(FIND_CONSTRUCTION_SITES);
+    
+    for (let s in this.resources.sources) {
+      //spawn source thread
+    }
+    
+    for (let s in structs) {
+      if (structs[s].structureType === "spawn") {
+        this.spawn_pos.x = structs[s].pos.x
+        this.spawn_pos.y = structs[s].pos.y
+        console.log("found spawn!")
+      }
+      console.log(structs[s])
+    }
+    console.log(JSON.stringify(structs))
+    
+  }
+  
+  not_my_controlled_room() {
+    console.log("room in: " + Game.rooms[this.room] + " is not owned by me :(")
+    
   }
   
 }
 
-
-module
-  .exports = p_room
+module.exports = p_room
 
 //locate all structures in room
 //check each structure to see if it needs anything store id's of ones that do and assign threads to them

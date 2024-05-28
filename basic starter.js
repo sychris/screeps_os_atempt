@@ -117,6 +117,7 @@ function upgrader(creep) {
 }
 
 function builder(creep) {
+  if (creep.memory.building === undefined) creep.memory.building = false
   if (creep.memory.building === true) {
     if (creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.building = false;

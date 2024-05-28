@@ -1,8 +1,10 @@
 // noinspection JSUnusedGlobalSymbols
 
 p_room = require("p_room")
+p_creepx = require("p_creepx")
 global.programs = {
   p_room,
+  p_creepx,
 }
 
 class file_system {

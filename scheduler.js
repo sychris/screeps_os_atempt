@@ -1,22 +1,31 @@
 class scheduler {
   constructor() {
     this.requested_threads = []
-    this.finished_threads = []
+    this.threads_to_tick = []
   }
   
   run() {
     this.up_all_thread_priority()
-    this.room_scheduler()
+    this.launch_bot()
     
   }
   
-  room_scheduler() {
-    for (let r in Game.rooms) {
-      this.request_thread(this.create_thread("-1", "p_room", Game.rooms[r].name))
+  launch_bot() {
+    if (global.threads === undefined) global.threads = {}
+    if (global.threads["UU0"] === undefined) {
+      let bot = this.create_thread("-1", "p_creepx")
+      //manual overide the uuid.  should not mave to do this any other time
+      bot.uuid = "UU0"
+      console.log(bot)
+      this.que_thread_request(bot)
+      console.log(this.requested_threads)
     }
+    console.log(this.requested_threads)
+    console.log(JSON.stringify(global.threads))
+    
   }
   
-  create_thread(parent, processes_name, args, priority = 500) {
+  create_thread(parent, processes_name, args = [], priority = 500) {
     let thread = {}
     thread.parent = parent
     thread.uuid = global.k.uuid()
@@ -26,8 +35,8 @@ class scheduler {
     return thread
   }
   
-  request_thread(process) {
-    this.requested_threads.push(process)
+  que_thread_request(thread) {
+    this.requested_threads.push(thread)
     this.sort_thread_que()
   }
   
