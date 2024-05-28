@@ -45,10 +45,11 @@ class program {
     return this.children.length === 0
   }
   
-  spawn_child_thread(process_name, args, priority) {
+  spawn_child_thread(process_name, args = undefined, priority = 500) {
     let thread = k.sched.create_thread(this.thread.uuid, process_name, args, priority = 500)
     this.children.push(thread.uuid)
     k.sched.que_thread_request(thread)
+    return thread
   }
   
   

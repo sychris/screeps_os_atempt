@@ -1,4 +1,5 @@
 program = require("program")
+creep_builder = require("creep_builder")
 
 class p_room extends program {
   constructor(thread, room) {
@@ -6,10 +7,14 @@ class p_room extends program {
     this.room = room
     this.resources = {}
     this.resources.sources = {}
+    this.structures = {}
+    this.structures.spawns = {}
     this.spawn_pos = {
       "x": undefined,
       "y": undefined
     }
+    this.requested_creeps = []
+    this.creeps = []
     
     this.my = null
     
@@ -58,12 +63,30 @@ class p_room extends program {
         this.my = false
       }
     }
+    
+    
+    if (this.my) this.my_controlled_room()
+    if (!this.my) this.not_my_controlled_room()
+    
+    this.status = "paused"
+  }
+  
+  resume() {
+    console.log("resuming p_room with room name: " + this.room)
+    if (this.my) this.my_controlled_room()
+    if (!this.my) this.not_my_controlled_room()
+    
+  }
+  
+  update_room_sources() {
     let sources = Game.rooms[this.room].find(FIND_SOURCES)
     if (sources.length > 0) {
       for (let s in sources) {
+        if (this.resources.sources[sources[s].id] !== undefined) return
         this.resources.sources[sources[s].id] = {}
         this.resources.sources[sources[s].id].pos = sources[s].pos
         this.resources.sources[sources[s].id].miner_pos = {"x": 0, "y": 0}
+        this.resources.sources[sources[s].id].thread = this.spawn_child_thread("p_source", this.resources.sources[sources[s].id]).uuid
         
         let passable = this.look_for_passable_around_point(sources[s].pos.x, sources[s].pos.y)
         if (passable.plains.length > 0) {
@@ -77,45 +100,56 @@ class p_room extends program {
         }
         
       }
-      console.log(JSON.stringify(this.resources.sources))
     }
-    
-    
-    if (this.my) this.my_controlled_room()
-    if (!this.my) this.not_my_controlled_room()
-    
-    console.log("status: " + this.status)
-    this.status = "paused"
   }
   
-  resume() {
-    console.log("resuming p_room with room name: " + this.room)
-  }
-  
-  my_controlled_room() {
-    console.log("room controller in: " + Game.rooms[this.room].name + " owned by me")
+  update_room_structures() {
     let structs = Game.rooms[this.room].find(FIND_MY_STRUCTURES)
     let construction_sites = Game.rooms[this.room].find(FIND_CONSTRUCTION_SITES);
     
-    for (let s in this.resources.sources) {
-      //spawn source thread
-    }
-    
     for (let s in structs) {
       if (structs[s].structureType === "spawn") {
-        this.spawn_pos.x = structs[s].pos.x
-        this.spawn_pos.y = structs[s].pos.y
-        console.log("found spawn!")
+        if (this.structures.spawns[structs[s]] !== undefined) return
+        this.structures.spawns[structs[s]] = structs[s]
+        this.structures.spawns.thread = this.spawn_child_thread("p_spawn", this.structures.spawns[structs[s]]).uuid
+        //console.log("found spawn!")
       }
-      console.log(structs[s])
+      //console.log(structs[s])
     }
-    console.log(JSON.stringify(structs))
+    //console.log(JSON.stringify(structs))
+    console.log(JSON.stringify(this.structures.spawns))
+  }
+  
+  my_controlled_room() {
+    this.update_room_structures()
+    this.update_room_sources()
+    this.check_if_any_requested_creep_has_spawned()
     
   }
   
   not_my_controlled_room() {
-    console.log("room in: " + Game.rooms[this.room] + " is not owned by me :(")
-    
+  
+  }
+  
+  request_creep(receving_uuid, creep_type) {
+    console.log("creep request from: " + receving_uuid + " receved of type: " + creep_type)
+    let creep = k.creep_build.request_creeps(this.room, "miner")
+    this.requested_creeps.push(creep)
+    console.log(JSON.stringify(this.requested_creeps))
+    return creep.name
+  }
+  
+  check_if_any_requested_creep_has_spawned() {
+    console.log("todo: finish check_if_any_requested_creep_has_spawned game.creeps")
+    console.log(JSON.stringify(Game.creeps))
+    for (let c in Game.creeps) {
+      for (let r in this.requested_creeps) {
+        //if(Game.creeps[c].name === this.requested_creeps[r].name){
+        //look up splice array logic again think i used it in the sched sort...
+        //  console.log("found creep that spawned")
+        //}
+      }
+    }
   }
   
 }

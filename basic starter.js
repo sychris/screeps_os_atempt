@@ -66,6 +66,7 @@ function harvester(creep) {
     
   } else {
     if (creep.store.getFreeCapacity() > 0) {
+      look_for_dropped_around_creep(creep)
       let sources = creep.room.find(FIND_SOURCES);
       if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
         creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
@@ -109,6 +110,7 @@ function upgrader(creep) {
       creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
     }
   } else {
+    look_for_dropped_around_creep(creep)
     let sources = creep.room.find(FIND_SOURCES);
     if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
       creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
@@ -132,12 +134,20 @@ function builder(creep) {
       creep.memory.building = true;
       creep.say('⚡ building');
     }
-    
+    look_for_dropped_around_creep(creep)
     let sources = creep.room.find(FIND_SOURCES);
     if (creep.harvest(sources[1]) === ERR_NOT_IN_RANGE) {
       creep.moveTo(sources[1], {visualizePathStyle: {stroke: '#ffaa00'}});
     }
   }
+}
+
+function look_for_dropped_around_creep(creep) {
+  let targets = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 1)
+  if (targets.length > 0) creep.pickup(targets[0])
+  let t_targets = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 1)
+  if (t_targets.length > 0) creep.withdraw(Tombstone, RESOURCE_ENERGY)
+  
 }
 
 module.exports = spawner;

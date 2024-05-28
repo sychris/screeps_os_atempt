@@ -2,9 +2,13 @@
 
 p_room = require("p_room")
 p_creepx = require("p_creepx")
+p_source = require("p_source")
+p_spawn = require("p_spawn")
 global.programs = {
   p_room,
   p_creepx,
+  p_source,
+  p_spawn,
 }
 
 class file_system {

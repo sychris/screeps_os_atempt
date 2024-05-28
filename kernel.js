@@ -1,11 +1,12 @@
 const scheduler = require("./scheduler");
 const file_system = require("./file_system");
-
+const creep_builder = require("creep_builder")
 
 class kernel {
   constructor() {
     this.sched = new scheduler()
     this.fs = new file_system()
+    this.creep_build = new creep_builder()
     this.valid_tick = Game.time
   }
   
@@ -32,7 +33,6 @@ class kernel {
       
     }
     
-    //todo add a check here to see what used cpu is at and shelf remaining threads to mem at a certain usage
     while (this.sched.requested_threads.length > 0) {
       let current_thread = this.sched.requested_threads.pop()
       this.exe(current_thread)
@@ -53,6 +53,7 @@ class kernel {
     }
     return survivers
   }
+  
   garbage_collect_old_threads() {
     let count = 0
     let time = Game.cpu.getUsed()
@@ -91,8 +92,10 @@ class kernel {
     
     console.log("outstanding threads: " + Object.keys(global.threads).length)
     console.log(JSON.stringify(global.threads))
-    console.log(count + " threads cleaned in " + Game.cpu.getUsed() - time + " cpu")
+    let used_cpu = Game.cpu.getUsed() - time
+    console.log(count + " threads cleaned in " + used_cpu + " cpu")
   }
+  
   post_tick() {
     this.garbage_collect_old_threads()
   }
@@ -101,6 +104,7 @@ class kernel {
     Memory.kernel.UUID = Memory.kernel.UUID + 1
     return "UU" + Memory.kernel.UUID
   }
+  
   verify_sliver() {
     if (this.valid_tick !== Game.time - 1) {
       this.valid_tick = Game.time

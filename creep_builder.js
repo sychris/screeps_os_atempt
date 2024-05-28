@@ -3,13 +3,6 @@
 
 class creep_builder {
   constructor() {
-    function role(prefix, mem, parts) {
-      this.prefix = prefix
-      this.mem = mem
-      //parts will be in shorthand format
-      this.parts = parts
-    }
-    
     this.role = {}
     this.role.prefix_dilimeter = "_"
     
@@ -21,6 +14,9 @@ class creep_builder {
     
   }
   
+  /*
+  apparently this won't work pre node v15
+   */
   parts_expander(short_hand_parts) {
     //MOVE,WORK,CARRY,ATTACK,RANGED_ATTACK,HEAL,CLAIM,TOUGH
     //m,w,c,a,r,h,l,t
@@ -38,4 +34,33 @@ class creep_builder {
     expanded = expanded.split(",") // turn in to array
     return expanded
   }
+  
+  request_creeps(room, type) {
+    let creep_data = {}
+    if (type === "miner") {
+      creep_data.name = this.role.miner.prefix + "_" + k.uuid()
+      let energy_available = Game.rooms[room].energyCapacityAvailable
+      if (energy_available < 300) console.log("ERROR: less than 300 energy capacity available in creep_builder")
+      if (energy_available = 300) creep_data.parts = [MOVE, WORK, CARRY]
+      if (energy_available > 300) creep_data.parts = [MOVE, WORK, WORK, CARRY]
+      //making this on energy cap availible should be more robust
+      //switch (Game.rooms[room].controller.level){
+      //  case < 300:
+      //    console.log("bad request of lvl 0 controller level")
+      //    break
+      //  case 1:
+      //    console.log()
+      //    break
+      //
+      //  default:
+      //    console.log("bad request of creep_builder: fell to default does room have controller?")
+      //}
+      //replace all aparently needs node version 15+
+      //creep_data.parts = this.parts_expander(creep_data.parts)
+      console.log(JSON.stringify(creep_data))
+      return creep_data
+    }
+  }
 }
+
+module.exports = creep_builder
